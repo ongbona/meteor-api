@@ -4,10 +4,10 @@ export class StudentM {
     static findStudent() {
       return Student.find().fetch()
     }
-    insertStudent(doc) {
+    static insertStudent(doc) {
         return Student.insert(doc)
     }
-    findStudent() {
-        return Student.find().fetch()
-    }
+    // findStudent() {
+    // return Student.find().fetch()
+    // }
   }
