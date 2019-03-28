@@ -1,8 +1,12 @@
 # meteor-api
 
 new terminal in folder api
+
 run
+
 npm install
+
+
 meteor
 
 
