@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <title>Page Title</title>
+    <script src="./vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <ul>
+            <li v-for="(todo,index) in todos">
+                {{ todo._id }} _ {{ todo.name }} _ {{todo.age}} _ {{todo.address}}
+                <button @click="btnDelete(index)">X{{index}}</button>
+                <button @click="btnEdit(todo,index)">Edit</button>
+            </li>
+        </ul>
+
+        Name:<input v-model="name"><br>
+        Age:<input v-model="age"><br>
+        Address:<input v-model="address"><br>
+        <button @click="btnSubmit">{{formType}}</button>
+        <button @click="btnGet">Get Data from out</button>
+        <h1> {{todos.length}}</h1>
+    </div>
+
+
+    <script>
+
+        new Vue({
+            el: '#app',
+            data: {
+                formType: 'Add',
+                todos: [],
+                name: 'Mama',
+                age: 20,
+                address: 'Battambang',
+                index: null,
+            },
+            mounted() {
+                this.btnGet()
+            },
+            methods: {
+                btnGet() {
+                    axios
+                        .get("http://localhost:3000/find_student")
+                        .then(response => {
+                            let a = response.data.result;
+                            this.todos = a;
+                        })
+                        .catch(error => {
+                            // handle error
+                            console.log(error);
+                        });
+                },
+                btnSubmit() {
+                    let doc = {
+                        name: this.name,
+                        age: this.age,
+                        address: this.address
+                    }
+                    var myJSON = JSON.stringify(doc);
+                    axios.get('http://localhost:3000/insert_student/' + myJSON)
+                        .then(doc=>{
+                            console.log(doc.result)
+                            this.btnGet();
+                        })
+                },
+                btnEdit(todo, index) {
+                    this.formType = "Update"
+                    this.name = todo.name
+                    this.age = todo.age
+                    this.address = todo.address
+                    this.index = index
+                    console.log(this.index)
+                },
+                btnDelete(index) {
+
+                    this.todos.splice(index, 1)
+                },
+                btnPush() {
+                    this.todos.push(
+                        {
+                            name: this.name,
+                            age: this.age,
+                            address: this.address
+                        }
+                    )
+                    console.log(this.todos)
+                    this.name = ''
+                    this.age = null
+                    this.address = ''
+                }
+            }
+        })
+
+    </script>
+
+
+</body>
